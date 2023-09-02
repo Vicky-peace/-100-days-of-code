@@ -21,7 +21,7 @@ function CreateNewTodo () {
     input_el.removeAttribute("disabled");
     input_el.focus();
 
-    // save()
+    Save();
 }
 
 function createTodoElement(item){
@@ -40,4 +40,63 @@ function createTodoElement(item){
     input_el.type = "text";
     input_el.value = item.text;
     input_el.setAttribute("disabled", "");
+
+    const action_el = document.createElement("div");
+    actions_el.classList.add("actions");
+
+
+    const edit_btn_el = document.createElement("button");
+	edit_btn_el.classList.add("material-icons");
+	edit_btn_el.innerText = "edit";
+
+    const remove_btn_el = document.createElement("button");
+	remove_btn_el.classList.add("material-icons", "remove-btn");
+	remove_btn_el.innerText = "remove_circle";
+
+    action_el.append(edit_btn_el);
+    actions_el.append(remove_btn_el);
+    
+    item_el.append(checkbox);
+    item_el.append(input_el);
+    item_el.append(actions_el);
+
+    // EVENTS
+    checkbox.addEventListener("change", () => {
+        item.complete = checkbox.checked;
+
+        if(item.complete){
+            item_el.classList.add("complete")
+        } else{
+            item_el.classList.remove("complete")
+        }
+
+        Save();
+    })
+
+    input_el.addEventListener('input', ()=>{
+        item.text = input_el.value;
+    });
+
+    input_el.addEventListener("blur", () =>{
+        input_el.setAttribute("disabled", "");
+        Save();
+    });
+    edit_btn_el.addEventListener("click", ()=>{
+        input_el.removeAttribute("disabled");
+        input_el.focus();
+    });
+
+    remove_btn_el.addEventListener("click", () => {
+        todos = todos.filter( t => t.id != item.id);
+
+        item_el.remove();
+
+        Save();
+    });
+
+    return{item_el, input_el, edit_btn_el, remove_btn_el}
+}
+
+function Save(){
+    // Save Todos
 }
